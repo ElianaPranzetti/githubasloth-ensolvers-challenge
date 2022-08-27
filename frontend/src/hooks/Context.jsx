@@ -20,6 +20,7 @@ export async function postData(url, data) {
         credentials: "same-origin", // include, *same-origin, omit
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": "Bearer " + localStorage.getItem("auth-token"),
         },
         redirect: "follow", // manual, *follow, error
         referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
@@ -32,7 +33,7 @@ export function Context({ props, children }) {
     const [isLogged, setIsLogged] = useState();
 
     useEffect(() => {
-        console.log(isLogged);
+
     }, [isLogged]);
 
     useEffect(() => {
