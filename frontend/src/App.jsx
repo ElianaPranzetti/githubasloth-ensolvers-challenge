@@ -1,34 +1,77 @@
-import { useContext } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
-import { Title } from './components/Title'
+import React, { useContext, useState, useEffect } from 'react';
+import './App.css';
+import { Title } from './components/Title';
 import { ColorModeSwitcher } from './components/ColorSwitcher';
-import { Center, Container, Flex, Grid } from '@chakra-ui/react';
+import { Center, Container, Flex, Grid, Box, Spacer, Button } from '@chakra-ui/react';
 import { Routes, Route } from "react-router-dom";
 import { Note } from './components/Note';
 import { AppContext } from "./hooks/Context";
 import { LogIn } from './pages/Login';
+import { LogOut } from './components/LogOut';
+import { NewNote } from './components/NewNote';
 
 function App() {
   const auth = useContext(AppContext);
 
   return (
     <>
-      {auth.isLogged ? (
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="login" element={<LogIn />} />
-        </Routes>
-      ) : (
-        <LogIn></LogIn>
-      )}
+      <Flex minH={"100vh"} w="100%" direction={"column"}>
+        <Box
+          w="100%"
+          p={4}
+          display="flex"
+        >
+          <ColorModeSwitcher />
+
+          {auth.isLogged ? (
+            <>
+              <Spacer />
+              <NewNote></NewNote>
+              <LogOut></LogOut>
+            </>
+          ) : (
+            <Spacer />
+          )}
+
+        </Box>
+        {auth.isLogged ? (
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="login" element={<LogIn />} />
+          </Routes>
+        ) : (
+          <LogIn></LogIn>
+        )}
+      </Flex>
     </>
   )
 }
 
 export default App
 
-function Home(params) {
+export function Home(params) {
+  const [notes, setNotes] = useState(undefined);
+
+  async function getAllNotes() {
+    await fetch("http://192.168.1.23:3000/notes", {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("auth-token")
+      }
+    })
+      .then((data) => data.json())
+      .then((response) => {
+        setNotes(response);
+        return response;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    getAllNotes();
+  }, []);
   return (
     <Flex grow={1}
       direction={"column"}
@@ -36,17 +79,19 @@ function Home(params) {
       fontSize="s"
       h={"100%"}>
       <Container maxW='100%'>
-        <ColorModeSwitcher />
         <Title title={"Mis notas"}></Title>
       </Container>
 
       <Center width={'100'} >
         <Grid templateColumns='repeat(3, 1fr)' gap={6}>
-          <Note title={'mi nueva nota'} content={'soy un contenido muy askdhakdalj askdjsakd dalskdjsalkd'}></Note>
-          <Note title={'mi nueva nota'} content={'soy un contenido muy askdhakdalj askdjsakd dalskdjsalkd'}></Note>
-          <Note title={'mi nueva nota'} content={'soy un contenido muy askdhakdalj askdjsakd dalskdjsalkd'}></Note>
-          <Note title={'mi nueva nota'} content={'soy un contenido muy askdhakdalj askdjsakd dalskdjsalkd'}></Note>
-          <Note title={'mi nueva nota'} content={'soy un contenido muy askdhakdalj askdjsakd dalskdjsalkd'}></Note>
+          {notes ? (
+            notes.map((note) => {
+              return <Note title={note.title} content={note.content} id={note.id} key={note.id}></Note>
+
+            })
+          ) :
+            <h3>No se encontro ninguna nota</h3>
+          }
         </Grid>
       </Center>
     </Flex>
