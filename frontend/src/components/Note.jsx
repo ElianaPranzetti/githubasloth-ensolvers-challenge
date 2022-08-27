@@ -1,4 +1,4 @@
-import { GridItem, Heading, Button, Text, useToast, useDisclosure } from "@chakra-ui/react";
+import { GridItem, Heading, Button, Text, useToast, useDisclosure, Textarea } from "@chakra-ui/react";
 import { FaTrash } from "react-icons/fa";
 import { postData } from '../hooks/Context';
 import React, { useRef } from "react";
@@ -86,6 +86,7 @@ export function Note({ id, title, content, isArchived, refreshNotes }) {
     return (
         <GridItem w='100%' bg='yellow.100' >
             <Heading paddingTop={'4'} as='h4' size='md' color={'black'}>{title}</Heading>
+            <Textarea isReadOnly color={'black'} value={content} />
 
             <GridItem area={'footer'}  >
                 <Button onClick={onOpen} margin={'4'} colorScheme='green'>Editar</Button>
