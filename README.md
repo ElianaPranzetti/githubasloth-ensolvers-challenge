@@ -37,5 +37,5 @@ This project is for taking notes and have the following functionalities:
 		- framer-motion: ^6.5.1
 
 ### Credentials for sign in
-- user: sbenel
+- name: sbenel
 - password: 421091
