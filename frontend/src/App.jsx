@@ -52,7 +52,7 @@ export default App
 export function Home(params) {
   const [notes, setNotes] = useState(undefined);
 
-  async function getAllNotes() {
+  async function getNotes() {
     await fetch("http://192.168.1.23:3000/notes/archived/false", {
       method: "GET",
       headers: {
@@ -69,8 +69,42 @@ export function Home(params) {
       });
   }
 
+  async function getArchivedNotes() {
+    await fetch("http://192.168.1.23:3000/notes/archived/true", {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("auth-token")
+      }
+    })
+      .then((data) => data.json())
+      .then((response) => {
+        setNotes(response);
+        return response;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function getAllNotes() {
+    await fetch("http://192.168.1.23:3000/notes/", {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("auth-token")
+      }
+    })
+      .then((data) => data.json())
+      .then((response) => {
+        setNotes(response);
+        return response;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   useEffect(() => {
-    getAllNotes();
+    getNotes();
   }, []);
   return (
     <Flex grow={1}
@@ -83,18 +117,17 @@ export function Home(params) {
       </Container>
 
       <Stack marginBottom={'4'} direction={['column', 'row']} spacing='24px'>
-        <NewNote getAllNotes={() => getAllNotes()}></NewNote>
+        <NewNote getAllNotes={() => getNotes()}></NewNote>
         <Spacer></Spacer>
         <Menu>
           <MenuButton as={Button} rightIcon={<FaArrowDown />}>
             Listar
           </MenuButton>
           <MenuList>
-            <MenuItem>Download</MenuItem>
-            <MenuItem>Create a Copy</MenuItem>
-            <MenuItem>Mark as Draft</MenuItem>
-            <MenuItem>Delete</MenuItem>
-            <MenuItem>Attend a Workshop</MenuItem>
+            <MenuItem onClick={() => getArchivedNotes()}>Listar archivadas</MenuItem>
+            <MenuItem onClick={() => getNotes()}>Listar sin archivar</MenuItem>
+            <MenuItem onClick={() => getAllNotes()}>Listar todas</MenuItem>
+
           </MenuList>
         </Menu>
       </Stack>
