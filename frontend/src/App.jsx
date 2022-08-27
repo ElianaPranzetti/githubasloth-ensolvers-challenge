@@ -136,7 +136,7 @@ export function Home(params) {
         <Grid templateColumns='repeat(3, 1fr)' gap={6}>
           {notes ? (
             notes.map((note) => {
-              return <Note title={note.title} content={note.content} id={note.id} key={note.id} refreshNotes={() => getAllNotes()} ></Note>
+              return <Note title={note.title} content={note.content} id={note.id} key={note.id} isArchived={note.isArchived} refreshNotes={() => getNotes()} ></Note>
             })
           ) :
             <h3>No se encontro ninguna nota</h3>
