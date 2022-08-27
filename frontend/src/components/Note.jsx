@@ -1,9 +1,14 @@
-import { GridItem, Heading, Button, Text, useToast, } from "@chakra-ui/react";
+import { GridItem, Heading, Button, Text, useToast, useDisclosure } from "@chakra-ui/react";
 import { FaTrash } from "react-icons/fa";
 import { postData } from '../hooks/Context';
+import React, { useRef } from "react";
+import { NoteForm } from './NoteForm';
 
 export function Note({ id, title, content, isArchived, refreshNotes }) {
     const toast = useToast();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const initialRef = React.useRef(null);
+    const finalRef = React.useRef(null);
 
     function ToastExample(title, des, type) {
         return toast({
@@ -15,7 +20,7 @@ export function Note({ id, title, content, isArchived, refreshNotes }) {
         });
     }
 
-    const onSubmit = async (noteId) => {
+    const deleteNote = async (noteId) => {
         postData("DELETE", "http://192.168.1.23:3000/notes/" + noteId, {}, {
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": "Bearer " + localStorage.getItem('auth-token')
@@ -30,7 +35,7 @@ export function Note({ id, title, content, isArchived, refreshNotes }) {
     };
 
     const archive = (noteId) => {
-        console.log(isArchived)
+
         let body;
 
         if (isArchived) {
@@ -59,14 +64,36 @@ export function Note({ id, title, content, isArchived, refreshNotes }) {
         });
     }
 
+    const onSubmit = () => {
+        postData("PATCH", "http://192.168.1.23:3000/notes/" + id, {
+            id: id,
+            title: titleNote.value,
+            content: contentNote.value,
+        }, {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": "Bearer " + localStorage.getItem('auth-token')
+        }).then((data) => {
+            if (!data.error) {
+                ToastExample("Exito.", "Nota actualizada exitosamente", "success");
+                onClose();
+                refreshNotes();
+            } else {
+                ToastExample("Error", data.message, "error");
+            }
+        });
+    }
+
     return (
-        <GridItem w='100%' h='120' bg='yellow.100' >
+        <GridItem w='100%' bg='yellow.100' >
             <Heading paddingTop={'4'} as='h4' size='md' color={'black'}>{title}</Heading>
 
             <GridItem area={'footer'}  >
-                <Button margin={'4'} colorScheme='green'>Editar</Button>
+                <Button onClick={onOpen} margin={'4'} colorScheme='green'>Editar</Button>
+
+                <NoteForm finalRef={finalRef} initialRef={initialRef} isOpen={isOpen} onClose={onClose} onSubmit={onSubmit} title={title} content={content} id={id}></NoteForm>
+
                 <Button onClick={() => archive(id)} margin={'4'} colorScheme='blue'>{(isArchived ? "Desarchivar" : "Archivar")}</Button>
-                <Button onClick={() => onSubmit(id)} margin={'4'} colorScheme='red'> <FaTrash></FaTrash> </Button>
+                <Button onClick={() => deleteNote(id)} margin={'4'} colorScheme='red'> <FaTrash></FaTrash> </Button>
             </GridItem>
         </GridItem >
     );

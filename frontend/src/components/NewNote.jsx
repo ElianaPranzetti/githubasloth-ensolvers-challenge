@@ -13,10 +13,11 @@ import {
     useToast,
     FormLabel,
     Input,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
 import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { postData } from '../hooks/Context';
+import { NoteForm } from './NoteForm';
 
 export function NewNote({ getAllNotes }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,7 +44,7 @@ export function NewNote({ getAllNotes }) {
 
     const onSubmit = async () => {
         postData("POST", "http://192.168.1.23:3000/notes", {
-            title: title.value,
+            title: titleNote.value,
             content: contentNote.value,
         }, {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -65,51 +66,7 @@ export function NewNote({ getAllNotes }) {
         <>
             <Button onClick={onOpen}>Nueva nota</Button>
             <form >
-                <Modal
-                    initialFocusRef={initialRef}
-                    isOpen={isOpen}
-                    finalFocusRef={finalRef}
-                    onClose={onClose}
-                >
-                    <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>Crear nueva nota</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody pb={6}>
-                            <FormControl isRequired>
-                                <FormLabel>Titulo</FormLabel>
-                                <Input  {...register("title", {
-                                    required: {
-                                        value: true,
-                                        message: "Ingrese un titulo",
-                                    },
-                                })} ref={initialRef} placeholder='Titulo' name='title' id='title' />
-                                {errors.usuario && (
-                                    <div className="invalid-feedback">
-                                        {errors.usuario.message}
-                                    </div>
-                                )}
-                            </FormControl>
-
-                            <FormControl mt={4} isRequired>
-                                <FormLabel>Contenido</FormLabel>
-                                <Textarea
-                                    {...register("contentNote", {
-                                        required: true,
-
-                                    })}
-                                    placeholder='En que estas pensando?' name='contentNote' id='contentNote' />
-                            </FormControl>
-                        </ModalBody>
-
-                        <ModalFooter>
-                            <Button onClick={onSubmit} colorScheme='blue' mr={3}>
-                                Save
-                            </Button>
-                            <Button onClick={onClose}>Cancel</Button>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
+                <NoteForm finalRef={finalRef} initialRef={initialRef} isOpen={isOpen} onClose={onClose} onSubmit={onSubmit} ></NoteForm>
             </form>
         </>
     )
