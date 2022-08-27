@@ -18,7 +18,7 @@ import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { postData } from '../hooks/Context';
 
-export function NewNote() {
+export function NewNote({ getAllNotes }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
         register,
@@ -41,15 +41,19 @@ export function NewNote() {
         });
     }
 
-    const onSubmit = async ({ usuario, clave }) => {
+    const onSubmit = async () => {
         postData("http://192.168.1.23:3000/notes", {
             title: title.value,
             content: contentNote.value,
+        }, {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": "Bearer " + localStorage.getItem('auth-token')
         }).then((data) => {
             console.log(data)
             if (!data.error) {
                 ToastExample("Exito.", "Nota registrada exitosamente", "success");
                 onClose();
+                getAllNotes();
                 reset();
             } else {
                 ToastExample("Error", data.message, "error");

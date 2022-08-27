@@ -26,7 +26,6 @@ function App() {
           {auth.isLogged ? (
             <>
               <Spacer />
-              <NewNote></NewNote>
               <LogOut></LogOut>
             </>
           ) : (
@@ -53,7 +52,7 @@ export function Home(params) {
   const [notes, setNotes] = useState(undefined);
 
   async function getAllNotes() {
-    await fetch("http://192.168.1.23:3000/notes", {
+    await fetch("http://192.168.1.23:3000/notes/archived/false", {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("auth-token")
@@ -81,19 +80,21 @@ export function Home(params) {
       <Container maxW='100%'>
         <Title title={"Mis notas"}></Title>
       </Container>
+      <Container marginBottom={'4'}>
+        <NewNote getAllNotes={getAllNotes()}></NewNote>
+      </Container>
 
       <Center width={'100'} >
         <Grid templateColumns='repeat(3, 1fr)' gap={6}>
           {notes ? (
             notes.map((note) => {
-              return <Note title={note.title} content={note.content} id={note.id} key={note.id}></Note>
-
+              return <Note title={note.title} content={note.content} id={note.id} key={note.id} ></Note>
             })
           ) :
             <h3>No se encontro ninguna nota</h3>
           }
         </Grid>
       </Center>
-    </Flex>
+    </Flex >
   )
 }

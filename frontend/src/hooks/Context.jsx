@@ -3,7 +3,7 @@ import { useLocation, Navigate } from "react-router-dom";
 
 export const AppContext = React.createContext();
 
-export async function postData(url, data) {
+export async function postData(url, data, header) {
     // Opciones por defecto estan marcadas con un *
     var formBody = [];
     for (var property in data) {
@@ -18,10 +18,7 @@ export async function postData(url, data) {
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, *same-origin, omit
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Authorization": "Bearer " + localStorage.getItem("auth-token"),
-        },
+        headers: header,
         redirect: "follow", // manual, *follow, error
         referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
         body: formBody, // body data type must match "Content-Type" header
@@ -48,6 +45,8 @@ export function Context({ props, children }) {
         const data = await postData("http://192.168.1.23:3000/auth/signin", {
             name: usuario,
             password: clave,
+        }, {
+            "Content-Type": "application/x-www-form-urlencoded",
         });
 
         if (!data.error) {
