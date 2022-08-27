@@ -1,34 +1,54 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
+import { Title } from './components/Title'
+import { ColorModeSwitcher } from './components/ColorSwitcher';
+import { Center, Container, Flex, Grid } from '@chakra-ui/react';
+import { Routes, Route } from "react-router-dom";
+import { Note } from './components/Note';
+import { AppContext } from "./hooks/Context";
+import { LogIn } from './pages/Login';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const auth = useContext(AppContext);
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <>
+      {auth.isLogged ? (
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="login" element={<LogIn />} />
+        </Routes>
+      ) : (
+        <LogIn></LogIn>
+      )}
+    </>
   )
 }
 
 export default App
+
+function Home(params) {
+  return (
+    <Flex grow={1}
+      direction={"column"}
+      textAlign="center"
+      fontSize="s"
+      h={"100%"}>
+      <Container maxW='100%'>
+        <ColorModeSwitcher />
+        <Title title={"Mis notas"}></Title>
+      </Container>
+
+      <Center width={'100'} >
+        <Grid templateColumns='repeat(3, 1fr)' gap={6}>
+          <Note title={'mi nueva nota'} content={'soy un contenido muy askdhakdalj askdjsakd dalskdjsalkd'}></Note>
+          <Note title={'mi nueva nota'} content={'soy un contenido muy askdhakdalj askdjsakd dalskdjsalkd'}></Note>
+          <Note title={'mi nueva nota'} content={'soy un contenido muy askdhakdalj askdjsakd dalskdjsalkd'}></Note>
+          <Note title={'mi nueva nota'} content={'soy un contenido muy askdhakdalj askdjsakd dalskdjsalkd'}></Note>
+          <Note title={'mi nueva nota'} content={'soy un contenido muy askdhakdalj askdjsakd dalskdjsalkd'}></Note>
+        </Grid>
+      </Center>
+    </Flex>
+  )
+}
