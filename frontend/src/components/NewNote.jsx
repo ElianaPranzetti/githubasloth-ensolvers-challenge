@@ -42,14 +42,14 @@ export function NewNote({ getAllNotes }) {
     }
 
     const onSubmit = async () => {
-        postData("http://192.168.1.23:3000/notes", {
+        postData("POST", "http://192.168.1.23:3000/notes", {
             title: title.value,
             content: contentNote.value,
         }, {
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": "Bearer " + localStorage.getItem('auth-token')
         }).then((data) => {
-            console.log(data)
+
             if (!data.error) {
                 ToastExample("Exito.", "Nota registrada exitosamente", "success");
                 onClose();

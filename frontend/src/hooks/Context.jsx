@@ -3,7 +3,7 @@ import { useLocation, Navigate } from "react-router-dom";
 
 export const AppContext = React.createContext();
 
-export async function postData(url, data, header) {
+export async function postData(method, url, data, header) {
     // Opciones por defecto estan marcadas con un *
     var formBody = [];
     for (var property in data) {
@@ -14,7 +14,7 @@ export async function postData(url, data, header) {
     formBody = formBody.join("&");
 
     const response = await fetch(url, {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        method: method, // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
         credentials: "same-origin", // include, *same-origin, omit
@@ -42,7 +42,7 @@ export function Context({ props, children }) {
     }, []);
 
     let signin = async (usuario, clave) => {
-        const data = await postData("http://192.168.1.23:3000/auth/signin", {
+        const data = await postData("POST", "http://192.168.1.23:3000/auth/signin", {
             name: usuario,
             password: clave,
         }, {
