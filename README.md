@@ -9,7 +9,8 @@ This project is for taking notes and have the following functionalities:
 - Edit a note
 
 ## Run in local
-You must have nodejs(v16.16.0), npm (8.18.0), docker (20.10.17) and docker-compose (2.9.0) installed then run **bash script.sh**
+You must have nodejs(v16.16.0), npm (8.18.0), docker (20.10.17) and docker-compose (2.9.0) installed then run: 
+```bash script.sh```
 
 This project was made in a Linux enviroment (Archlinux)
 
