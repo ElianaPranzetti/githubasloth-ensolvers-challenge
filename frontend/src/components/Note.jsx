@@ -1,5 +1,5 @@
 import { GridItem, Heading, Button, Text, useToast, useDisclosure, Textarea } from "@chakra-ui/react";
-import { FaTrash } from "react-icons/fa";
+import { FaArrowCircleUp, FaTrash } from "react-icons/fa";
 import { postData } from '../hooks/Context';
 import React, { useRef } from "react";
 import { NoteForm } from './NoteForm';
@@ -107,7 +107,7 @@ export function Note({ id, title, content, isArchived, refreshNotes }) {
 
                 <NoteForm finalRef={finalRef} initialRef={initialRef} isOpen={isOpen} onClose={onClose} onSubmit={onSubmit} title={title} content={content} id={id}></NoteForm>
 
-                <Button onClick={() => archive(id)} margin={'4'} colorScheme='blue'>{(isArchived ? "Desarchivar" : "Archivar")}</Button>
+                <Button width={'100px'} onClick={() => archive(id)} margin={'4'} colorScheme='blue'>{(isArchived ? "Desarchivar" : "Archivar")}</Button>
                 <Button onClick={() => deleteNote(id)} margin={'4'} colorScheme='red'> <FaTrash></FaTrash> </Button>
             </GridItem>
         </GridItem >

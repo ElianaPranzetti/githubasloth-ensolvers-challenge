@@ -133,7 +133,7 @@ export function Home(params) {
       </Stack>
 
       <Center width={'100'} >
-        <Grid templateColumns='repeat(3, 1fr)' gap={6}>
+        <Grid templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)',]} gap={6} >
           {notes ? (
             notes.map((note) => {
               return <Note title={note.title} content={note.content} id={note.id} key={note.id} isArchived={note.isArchived} refreshNotes={() => getNotes()} ></Note>
