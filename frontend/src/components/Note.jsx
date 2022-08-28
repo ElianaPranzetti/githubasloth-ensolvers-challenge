@@ -65,11 +65,25 @@ export function Note({ id, title, content, isArchived, refreshNotes }) {
     }
 
     const onSubmit = () => {
-        postData("PATCH", "http://192.168.1.23:3000/notes/" + id, {
-            id: id,
-            title: titleNote.value,
-            content: contentNote.value,
-        }, {
+        let body;
+
+        if (isArchived) {
+            body = {
+                id: id,
+                title: titleNote.value,
+                content: contentNote.value,
+                state: true,
+            }
+
+        } else {
+            body = {
+                id: id,
+                title: titleNote.value,
+                content: contentNote.value,
+            }
+        }
+
+        postData("PATCH", "http://192.168.1.23:3000/notes/" + id, body, {
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": "Bearer " + localStorage.getItem('auth-token')
         }).then((data) => {
