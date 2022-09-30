@@ -23,41 +23,40 @@ export function NoteForm({ initialRef, isOpen, finalRef, onClose, onSubmit, titl
         noteContent = content
     }
     return (
-        <>
-            <Modal
-                initialFocusRef={initialRef}
-                isOpen={isOpen}
-                finalFocusRef={finalRef}
-                onClose={onClose}
-            >
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Crear nueva nota</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody pb={6}>
-                        <Input type={"hidden"} value={id} ></Input>
-                        <FormControl isRequired>
-                            <FormLabel>Titulo</FormLabel>
-                            <Input ref={initialRef} placeholder='Titulo' name='title' id='titleNote' defaultValue={noteTitle} />
 
-                        </FormControl>
+        <Modal
+            initialFocusRef={initialRef}
+            isOpen={isOpen}
+            finalFocusRef={finalRef}
+            onClose={onClose}
+        >
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Crear nueva nota</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody pb={6}>
+                    <Input type={"hidden"} value={id} ></Input>
+                    <FormControl isRequired>
+                        <FormLabel>Titulo</FormLabel>
+                        <Input ref={initialRef} placeholder='Titulo' name='title' id='titleNote' defaultValue={noteTitle} />
+                    </FormControl>
 
-                        <FormControl mt={4} isRequired>
-                            <FormLabel>Contenido</FormLabel>
-                            <Textarea
-                                placeholder='En que estas pensando?' name='contentNote' id='contentNote' defaultValue={noteContent} />
+                    <FormControl mt={4} >
+                        <FormLabel>Contenido</FormLabel>
+                        <Textarea
+                            placeholder='En que estas pensando?' name='contentNote' id='contentNote' defaultValue={noteContent} />
 
-                        </FormControl>
-                    </ModalBody>
+                    </FormControl>
+                </ModalBody>
 
-                    <ModalFooter>
-                        <Button onClick={onSubmit} colorScheme='blue' mr={3}>
-                            Save
-                        </Button>
-                        <Button onClick={onClose}>Cancel</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        </>
+                <ModalFooter>
+                    <Button onClick={onSubmit} colorScheme='blue' mr={3}>
+                        Save
+                    </Button>
+                    <Button onClick={onClose}>Cancel</Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+
     )
 } 

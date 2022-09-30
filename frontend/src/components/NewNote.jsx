@@ -1,29 +1,17 @@
 import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
     useDisclosure,
     Button,
-    Textarea,
-    FormControl,
     useToast,
-    FormLabel,
-    Input,
 } from '@chakra-ui/react';
-import React, { useRef } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { postData } from '../hooks/Context';
+import { domain } from '../utils';
 import { NoteForm } from './NoteForm';
 
 export function NewNote({ getAllNotes }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
-        register,
-        handleSubmit,
         reset,
         formState: { errors },
     } = useForm();
@@ -42,8 +30,8 @@ export function NewNote({ getAllNotes }) {
         });
     }
 
-    const onSubmit = async () => {
-        postData("POST", "http://192.168.1.23:3000/notes", {
+    const onSubmit = () => {
+        postData("POST", `${domain}/notes`, {
             title: titleNote.value,
             content: contentNote.value,
         }, {
@@ -65,9 +53,7 @@ export function NewNote({ getAllNotes }) {
     return (
         <>
             <Button onClick={onOpen}>Nueva nota</Button>
-            <form >
-                <NoteForm finalRef={finalRef} initialRef={initialRef} isOpen={isOpen} onClose={onClose} onSubmit={onSubmit} ></NoteForm>
-            </form>
+            <NoteForm finalRef={finalRef} initialRef={initialRef} isOpen={isOpen} onClose={onClose} onSubmit={onSubmit} ></NoteForm>
         </>
     )
 }

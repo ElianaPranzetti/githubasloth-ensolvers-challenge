@@ -9,7 +9,8 @@ import { AppContext } from "./hooks/Context";
 import { LogIn } from './pages/Login';
 import { LogOut } from './components/LogOut';
 import { NewNote } from './components/NewNote';
-import { FaArrowAltCircleDown, FaArrowDown } from 'react-icons/fa';
+import { FaArrowDown } from 'react-icons/fa';
+import { domain } from './utils';
 
 function App() {
   const auth = useContext(AppContext);
@@ -49,11 +50,11 @@ function App() {
 
 export default App
 
-export function Home(params) {
-  const [notes, setNotes] = useState(undefined);
+export function Home() {
+  const [notes, setNotes] = useState([]);
 
-  async function getNotes() {
-    await fetch("http://192.168.1.23:3000/notes/archived/false", {
+  function getNotes() {
+    fetch(`${domain}/notes/archived/false`, {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("auth-token")
@@ -69,8 +70,8 @@ export function Home(params) {
       });
   }
 
-  async function getArchivedNotes() {
-    await fetch("http://192.168.1.23:3000/notes/archived/true", {
+  function getArchivedNotes() {
+    fetch(`${domain}/notes/archived/true`, {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("auth-token")
@@ -86,8 +87,8 @@ export function Home(params) {
       });
   }
 
-  async function getAllNotes() {
-    await fetch("http://192.168.1.23:3000/notes/", {
+  function getAllNotes() {
+    fetch(`${domain}/notes/`, {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("auth-token")
@@ -134,7 +135,7 @@ export function Home(params) {
 
       <Center width={'100'} >
         <Grid templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)',]} gap={6} >
-          {notes ? (
+          {notes.length > 0 ? (
             notes.map((note) => {
               return <Note title={note.title} content={note.content} id={note.id} key={note.id} isArchived={note.isArchived} refreshNotes={() => getNotes()} ></Note>
             })

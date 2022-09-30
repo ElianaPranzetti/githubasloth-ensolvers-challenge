@@ -3,6 +3,7 @@ import { FaArrowCircleUp, FaTrash } from "react-icons/fa";
 import { postData } from '../hooks/Context';
 import React, { useRef } from "react";
 import { NoteForm } from './NoteForm';
+import { domain } from "../utils";
 
 export function Note({ id, title, content, isArchived, refreshNotes }) {
     const toast = useToast();
@@ -21,7 +22,7 @@ export function Note({ id, title, content, isArchived, refreshNotes }) {
     }
 
     const deleteNote = async (noteId) => {
-        postData("DELETE", "http://192.168.1.23:3000/notes/" + noteId, {}, {
+        postData("DELETE", `${domain}/notes/` + noteId, {}, {
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": "Bearer " + localStorage.getItem('auth-token')
         }).then((data) => {
@@ -51,7 +52,7 @@ export function Note({ id, title, content, isArchived, refreshNotes }) {
             }
         }
 
-        postData("PATCH", "http://192.168.1.23:3000/notes/" + noteId, body, {
+        postData("PATCH", `${domain}/notes/` + noteId, body, {
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": "Bearer " + localStorage.getItem('auth-token'),
         }).then((data) => {
@@ -83,7 +84,7 @@ export function Note({ id, title, content, isArchived, refreshNotes }) {
             }
         }
 
-        postData("PATCH", "http://192.168.1.23:3000/notes/" + id, body, {
+        postData("PATCH", `${domain}/notes/` + id, body, {
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": "Bearer " + localStorage.getItem('auth-token')
         }).then((data) => {

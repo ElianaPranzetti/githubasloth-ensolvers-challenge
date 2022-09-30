@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useLocation, Navigate } from "react-router-dom";
+import { domain } from "../utils";
 
 export const AppContext = React.createContext();
 
@@ -26,12 +27,8 @@ export async function postData(method, url, data, header) {
     return response.json(); // parses JSON response into native JavaScript objects
 }
 
-export function Context({ props, children }) {
+export function Context({ children }) {
     const [isLogged, setIsLogged] = useState();
-
-    useEffect(() => {
-
-    }, [isLogged]);
 
     useEffect(() => {
         if (localStorage.getItem("auth-token")) {
@@ -41,8 +38,8 @@ export function Context({ props, children }) {
         }
     }, []);
 
-    let signin = async (usuario, clave) => {
-        const data = await postData("POST", "http://192.168.1.23:3000/auth/signin", {
+    const signin = async (usuario, clave) => {
+        const data = await postData("POST", `${domain}/auth/signin`, {
             name: usuario,
             password: clave,
         }, {
@@ -58,7 +55,7 @@ export function Context({ props, children }) {
         }
     };
 
-    let signout = () => {
+    const signout = () => {
         localStorage.removeItem("auth-token");
         setIsLogged(false);
     };
@@ -69,30 +66,5 @@ export function Context({ props, children }) {
         >
             {children}
         </AppContext.Provider>
-    );
-}
-
-export function RequireAuth({ children, props }) {
-    const auth = useContext(AppContext);
-
-    let location = useLocation();
-
-    //if (!auth.isLogged) {
-
-    // Redirect them to the /login page, but save the current location they were
-    // trying to go to when they were redirected. This allows us to send them
-    // along to that page after they login, which is a nicer user experience
-    // than dropping them off on the home page.
-    //  return <Navigate to="/login" state={{ from: location }} replace />;
-    //}
-
-    return (
-        <Context.Consumer>
-            {" "}
-            {(value) => {
-                if (value.isLogged) return children;
-                else return <Navigate to="/login" state={{ from: location }} replace />;
-            }}{" "}
-        </Context.Consumer>
     );
 }
